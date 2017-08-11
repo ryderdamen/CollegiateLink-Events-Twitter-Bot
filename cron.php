@@ -49,7 +49,6 @@ function searchEvents($eventsArray) {
 	
 	$now =  strtotime( date('Y-m-d H:i:s') ); // Returns the current date, for processing
 	$later = strtotime( date('Y-m-d H:i:s', strtotime('+ 65 minutes') ) ); // Returns the date 1 hour 5 mins later
-	
 	$i_searched = 0; // Setting integer count for events searched
 	$i_posted = 0; // Setting integer count for events posted
 	
@@ -70,12 +69,10 @@ function searchEvents($eventsArray) {
 		
 		$event_start_time = findEventStartDate($event_raw_description); // Retrieves the start time from the DOM tree, returned as ISO
 		$event_start_unix = strtotime($event_start_time);
-		
-		
+				
 		if ($now <= $event_start_unix and $event_start_unix <= $later) {
 			// We've got a currently happening event!
 			$event_location = findEventLocation($event_raw_description); // Using grep to grab the location
-			
 			tweetStuff($event_name, $event_url, $event_location, $event_organization, $event_start_time);
 			$i_posted++;
 		}
@@ -118,12 +115,15 @@ function tweetStuff($event_name, $event_url, $event_location, $event_organizatio
 
 function findEventStartDate($description) {
 	
-	
 	// Finding the start date
     preg_match("/dtstart\" title=\"(.*?)\"/", $description, $dtstart);
     
     if (empty($dtstart)){ // If the date is hidden somewhere else in the DOM tree
-    	preg_match("/class=\"value\"	title=\"(.*?)\"/", $description, $dtstart);
+	    // Get the date
+	    preg_match("/span class=\"dtstart\"><span class=\"value\" title=\"(.*?)\"/", $description, $dtstart_date);	    
+	    // Get the time
+    	preg_match("/class=\"value\"	title=\"(.*?)\"/", $description, $dtstart_time);
+    	return $dtstart_date[1] . "T" . $dtstart_time[1]; // This RSS feed layout is the stuff of nightmares
     };
     
     // Return in ISO format for multi-use processing
