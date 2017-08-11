@@ -59,7 +59,7 @@ function searchEvents($eventsArray) {
 		$event_url = $event->link;
 		$event_organization = $event->author;
 		$event_name = $event->title;
-		//$event_raw_description = $event->description; - Not needed, perhaps in the future.
+		$event_raw_description = $event->description;
 		
 		// Do not include cancelled events
 		if (strpos($event_name, '(Cancelled)') !== false) { continue; }		
@@ -70,6 +70,7 @@ function searchEvents($eventsArray) {
 		
 		$event_start_time = findEventStartDate($event_raw_description); // Retrieves the start time from the DOM tree, returned as ISO
 		$event_start_unix = strtotime($event_start_time);
+		
 		
 		if ($now <= $event_start_unix and $event_start_unix <= $later) {
 			// We've got a currently happening event!
@@ -116,6 +117,7 @@ function tweetStuff($event_name, $event_url, $event_location, $event_organizatio
 
 
 function findEventStartDate($description) {
+	
 	
 	// Finding the start date
     preg_match("/dtstart\" title=\"(.*?)\"/", $description, $dtstart);
