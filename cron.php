@@ -96,7 +96,7 @@ function tweetStuff($event_name, $event_url, $event_location, $event_organizatio
     define("OAUTH_SECRET", $twitter_oauth_secret);
     $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_SECRET);
 	
-	// Limiting the string lengths for twitter with a elvis operators (similar to if else statements)
+	// Limiting the string lengths for twitter with elvis operators (similar to if else statements)
     $event_name = strlen($event_name) > 30 ? substr($event_name,0,27)."..." : $event_name;
     $event_organization = strlen($event_organization) > 30 ? substr($event_organization,0,27)."..." : $event_organization;
     $event_location = strlen($event_location) > 30 ? substr($event_location,0,27)."..." : $event_location;
@@ -105,7 +105,7 @@ function tweetStuff($event_name, $event_url, $event_location, $event_organizatio
     $event_start_time = date('g:i A' ,strtotime($event_start_time));
         
     // Sending data to twitter
-    $tweet = "{$event_start_time}: {$event_name} hosted by {$event_organization}. Location: {$event_location}. {$event_url}";
+    $tweet = "{$event_start_time}: {$event_name} hosted by {$event_organization}. 📍 {$event_location}. {$event_url}";
     $content = $connection->get('account/verify_credentials');
     $connection->post('statuses/update', array('status' => $tweet));
     
