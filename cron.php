@@ -17,16 +17,16 @@ if ($file_access_key !== $access_key) { // $file_access_key provided by
 	
 // Global Variables
 $feedURL = "https://connectru.ryerson.ca/events/events.rss";
+$notifyEmail = ""; // Enter an email here if you wish to be notified when a tweet is posted
 
 // Core Code
 $eventsArray = getRSSFeed($feedURL);
 $results = searchEvents($eventsArray);
 echo $results[0] . " events searched, " . $results[1] . " tweets posted.";
 
-// For development only
-if ($results[1] !== 0) {
-	// Send Ryder an email
-	error_log("A RyersonEvents tweet has been posted.", 1, "ryder@ryderdamen.com");
+// Notify someone if the option is set, and if a tweet is posted
+if ($results[1] !== 0 and $notifyEmail !== "") {
+	error_log("CollegiateLink Event Bot: A tweet has been posted.", 1, $notifyEmail);
 }
 
 
