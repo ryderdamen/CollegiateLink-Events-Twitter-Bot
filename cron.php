@@ -5,9 +5,11 @@
 // This code is built to be easily adapted for other schools using CollegiateLink software (Brock University, etc)
 
 // File Setup
-date_default_timezone_set('America/Toronto');	// Set up timezone
 include 'includes/api_keys.php';
 include 'includes/config.php';
+date_default_timezone_set($timeZoneSet);
+$today = date('Y-m-d');
+
 
 // File Authorization
 $access_key = htmlspecialchars($_GET['key']);
@@ -15,6 +17,7 @@ if ($file_access_key !== $access_key) { // $file_access_key provided by
 	echo "Unauthorized";
 	die;
 }	
+
 
 // Core Code
 $eventsArray = getRSSFeed($feedURL);
@@ -26,9 +29,39 @@ if ($results[1] !== 0 and $notifyEmail !== "") {
 	error_log($tweetNotificationMessage, 1, $notifyEmail);
 }
 
+// Build the daily schedule if it is necessary
+echo '<br>' . buildDailySchedule($dailyScheduleExecutionTime, $results[2], $today);
+
+
+
+
 
 
 // Functions ----------------------------------------------------------------------------------------------------
+
+function buildDailySchedule($dailyScheduleExecutionTime, $todays_events, $today) {
+	// This function builds a daily schedule at a predetermined time, where students can view events in a simple layout
+	
+/*
+	if () { // If it's not time to build the schedule, don't build it.
+		return 'The daily schedule was not built.';
+	}
+*/
+
+	$json_print = array(
+		'meta' => 'nah',
+		'events' => $todays_events
+	);
+
+
+	// Write the data to JSON
+	$json_file = fopen("./today/events.json", "w");
+	fwrite($json_file, json_encode($json_print, true));
+	fclose($json_file);
+	
+	return 'The daily schedule was built';
+
+}
 
 function getRSSFeed($feedURL) {
 	// This function retrieves the RSS feed from the appropriate website, and returns the decoded array
@@ -48,6 +81,8 @@ function searchEvents($eventsArray) {
 	$later = strtotime( date('Y-m-d H:i:s', strtotime('+ 65 minutes') ) ); // Returns the date 1 hour 5 mins later
 	$i_searched = 0; // Setting integer count for events searched
 	$i_posted = 0; // Setting integer count for events posted
+	$todays_events = array();
+	$today = date('Y-m-d');
 	
 	foreach ($eventsArray->channel->item as $event) {
 		
@@ -66,6 +101,25 @@ function searchEvents($eventsArray) {
 		
 		$event_start_time = findEventStartDate($event_raw_description); // Retrieves the start time from the DOM tree, returned as ISO
 		$event_start_unix = strtotime($event_start_time);
+		$event_start_ymd = date('Y-m-d', $event_start_unix); // Get the event start time as a day
+		
+		
+		if ($today == $event_start_ymd) { // If the event is starting today, at it to the today array
+			
+			// Find the event location and end date
+			$event_location = findEventLocation($event_raw_description);
+			$event_end_time = findEventEndDate($event_raw_description); // Retrieves the start time from the DOM tree, returned as ISO
+			
+			// Add the event to the today array
+			$todays_events[] = [
+				'event_url' => "{$event_url}",
+				'event_organization' => "{$event_organization}",
+				'event_name' => "{$event_name}",
+				'event_location' => "{$event_location}",
+				'event_start' => "{$event_start_time}",
+				'event_end' => "{$event_end_time}"
+			];
+		}
 				
 		if ($now <= $event_start_unix and $event_start_unix <= $later) {
 			// We've got a currently happening event!
@@ -75,7 +129,8 @@ function searchEvents($eventsArray) {
 		}
 		$i_searched++;
 	} // end of foreach
-	return array($i_searched, $i_posted);
+	
+	return array($i_searched, $i_posted, $todays_events);
 } 
 
 
@@ -102,7 +157,7 @@ function tweetStuff($event_name, $event_url, $event_location, $event_organizatio
     $event_start_time = date('g:i A' ,strtotime($event_start_time));
         
     // Sending data to twitter
-    $tweet = "{$event_start_time}: {$event_name} hosted by {$event_organization}. 📍 {$event_location}. {$event_url}";
+    $tweet = "{$event_start_time}: {$event_name} hosted by {$event_organization}. 📍{$event_location}. {$event_url}";
     $content = $connection->get('account/verify_credentials');
     $connection->post('statuses/update', array('status' => $tweet));
     
@@ -128,14 +183,19 @@ function findEventStartDate($description) {
 	
 }
 
-function findEventEndDate() {
-	
-	// Finding the end date (Not currently used)
-    preg_match("/dtend\" title=\"(.*?)\"/", $description, $dtend);  
+function findEventEndDate($description) {
+
+	// Finding the end date
+    preg_match("/dtend\" title=\"(.*?)\"/", $description, $dtend);
     
-    if ( empty($dtend) ) { // If the date is hidden somewhere else in the DOM tree
-        preg_match("/class=\"dtend\"	title=\"(.*?)\"/", $description, $dtend);
+    if (empty($dtend)){ // If the date is hidden somewhere else in the DOM tree
+	    // Get the date
+	    preg_match("/span class=\"dtend\" title=\"(.*?)\"/", $description, $dtend_date);	    
+	    // Get the time
+    	preg_match("/dtend\"	title=\"(.*?)\"/", $description, $dtend_time);
+    	return $dtend_date[1] . "T" . $dtend_time[1]; // This RSS feed layout is the stuff of nightmares
     };
+
     
     // Return in ISO format for multi-use processing
     return $dtend[1];

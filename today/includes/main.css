@@ -1,0 +1,107 @@
+/*
+	Designed by Ryder Damen, 2017
+	ryderdamen.com
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:600');
+
+html {
+	height: 100%;
+	margin: 0;
+	box-sizing: border-box;
+
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+
+body {
+  	background-color: #fff;
+  	color: #222;
+  	margin: 0;
+  	
+  position: relative;
+  padding-bottom: 6rem;
+  min-height: 100%;
+  	
+}
+
+h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	text-align: center;
+	margin: 0;
+	padding-top: 50px;
+	padding-bottom: 25px;
+}
+
+p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+a {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	color: #222;
+	text-decoration: none;
+	text-align: left;
+	background-color: 000;
+}
+
+a:hover {
+	background-color: #222;
+	color: #fff;
+}
+
+
+.header {
+	min-width: 500px;
+}
+
+.footer {
+	bottom: 0;
+	height: 50px;
+	width: 100%;
+	background-color: transparent;
+	position: absolute;
+	text-align: center;
+}
+
+.table {
+	width: 80%;
+	color: #222;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	border-collapse: collapse;
+	margin-bottom: 50px;
+	margin: auto;
+
+}
+
+tr {
+	text-align: left;
+	vertical-align: middle;
+	height: 50px;
+	border-bottom-color: 222;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	padding-right: 10px;
+}
+
+th {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 600;
+	padding: 10px;
+
+}
+
+td {
+	padding: 10px;
+}
+
