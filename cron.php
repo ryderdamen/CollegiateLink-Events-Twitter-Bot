@@ -5,19 +5,16 @@
 // This code is built to be easily adapted for other schools using CollegiateLink software (Brock University, etc)
 
 // File Setup
-date_default_timezone_set('America/Toronto');	// Set up timezone, since Ryder's server is in Denver
+date_default_timezone_set('America/Toronto');	// Set up timezone
 include 'includes/api_keys.php';
+include 'includes/config.php';
 
 // File Authorization
 $access_key = htmlspecialchars($_GET['key']);
 if ($file_access_key !== $access_key) { // $file_access_key provided by 
 	echo "Unauthorized";
 	die;
-}
-	
-// Global Variables
-$feedURL = "https://connectru.ryerson.ca/events/events.rss";
-$notifyEmail = ""; // Enter an email here if you wish to be notified when a tweet is posted
+}	
 
 // Core Code
 $eventsArray = getRSSFeed($feedURL);
@@ -26,7 +23,7 @@ echo $results[0] . " events searched, " . $results[1] . " tweets posted.";
 
 // Notify someone if the option is set, and if a tweet is posted
 if ($results[1] !== 0 and $notifyEmail !== "") {
-	error_log("CollegiateLink Event Bot: A tweet has been posted.", 1, $notifyEmail);
+	error_log($tweetNotificationMessage, 1, $notifyEmail);
 }
 
 
