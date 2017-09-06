@@ -11,7 +11,8 @@ Originally built for Brock University, I decided to refactor and rebuild this bo
 
 ## Setup
 1. Clone this repository
-2. Change the 'sample_api_keys.php' file to 'api_keys.php' and add in your required variables
+2. Change the '/includes/sample_api_keys.php' file to 'api_keys.php' and add in your required variables
+   Change the '/includes/sample_config.php' file to 'config.php' and add in your required variables
 
 `````php
 
