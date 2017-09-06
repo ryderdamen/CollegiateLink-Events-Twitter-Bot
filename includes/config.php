@@ -9,17 +9,18 @@ $tweetNotificationMessage = "CollegiateLink Event Bot: A tweet has been posted."
 $timeZoneSet = "America/Toronto";
 
 // Daily Summary PAGE Variables
-$enableDailySummaryPage = "true"; // Enables a daily summary page to be generated
+$enableDailySummaryPage = true; // Enables a daily summary page to be generated
 $schoolName = "Ryerson"; // Enter your school's name for the daily summary page
 $schoolURL = "https://connectRU.ryerson.ca"; // Enter your school's URL for the daily summary page
 $collegiateLinkSiteName = "ConnectRU";
 
-/* COMING SOON
-// Daily Summary TWEET Variables
-$dailySummaryTweetMessage = "Hello Ryerson, there are ### events for today.";
-$dailySummaryTweetMessage_oneEvent = "Hi Ryerson, there is 1 event scheduled for today.";
-$dailySummaryTweetMessage_noEvents = "Hello Ryerson, there are no events scheduled for today.";
-*/
-	
+// Daily Summary Tweet Variables
+$enableDailySummaryTweet = true;
+$dailySummaryHour = "17"; // Which hour of the day (24 hours) do you want this to post at?
+$dailySummaryMultipleEventsMessage = "Hey Ryerson, there are ### events happening today. Check them out here:"; ### is replaced by a count
+$dailySummaryOneEventMessage = "Hey Ryerson, there is one event happening today. Check them out here:";
+$dailySummaryNoEventsMessage = "Hey Ryerson, unfortunately there are no events scheduled for today. Check back soon.";
+$dailySummaryUrl = "http://ryda.ca/ryerson-events/today"
+
 ?>
 	

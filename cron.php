@@ -30,26 +30,78 @@ if ($results[1] !== 0 and $notifyEmail !== "") {
 }
 
 // Build the daily schedule if it is necessary
-echo '<br>' . buildDailySchedule($dailyScheduleExecutionTime, $results[2], $today);
+echo '<br>' . buildDailySchedule($results[2], $today);
 
-
-
+// Tweet the daily summary
+echo '<br>' . tweetDailySummary($dailySummaryHour, $enableDailySummaryTweet, $dailySummaryNoEventsMessage, $dailySummaryOneEventMessage, $dailySummaryMultipleEventsMessage, $dailySummaryUrl);
 
 
 
 // Functions ----------------------------------------------------------------------------------------------------
 
-function buildDailySchedule($dailyScheduleExecutionTime, $todays_events, $today) {
+
+function tweetDailySummary($dailySummaryHour, $enableDailySummaryTweet, $dailySummaryNoEventsMessage, $dailySummaryOneEventMessage, $dailySummaryMultipleEventsMessage, $dailySummaryUrl) {
+	
+	
+	$currentHour = date('G');
+	
+	if ( $currentHour == $dailySummaryHour and $enableDailySummaryTweet == true) { // Tweet the daily summary
+		$json_events = json_decode(file_get_contents('today/events.json'));
+		$count = $json_events->meta->dailyEventCount; 
+		
+		if ($count == 0) {
+			$daily_message = $dailySummaryNoEventsMessage;
+		}
+		elseif ($count == 1) {
+			$daily_message = $dailySummaryOneEventMessage;
+		}
+		else {
+			$daily_message = preg_replace("/###/", $count, $dailySummaryMultipleEventsMessage);
+		}
+		
+		$daily_message .= " " . $dailySummaryUrl;
+		
+		
+		// Connecting to twitter
+		require_once 'includes/twitteroauth.php';
+		include 'includes/api_keys.php';
+	
+		// Initializing twitter connection
+	    define("CONSUMER_KEY", $twitter_consumer_key);
+	    define("CONSUMER_SECRET", $twitter_consumer_secret);
+	    define("OAUTH_TOKEN", $twitter_oauth_token);
+	    define("OAUTH_SECRET", $twitter_oauth_secret);
+	    $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_SECRET);
+		    
+	    // Sending data to twitter
+	    $tweet = $daily_message;
+	    $content = $connection->get('account/verify_credentials');
+	    $connection->post('statuses/update', array('status' => $tweet));
+	    
+	    return "The daily tweet was posted";
+		
+	}
+	
+	
+}
+
+function buildDailySchedule($todays_events, $today, $enableDailySummaryPage) {
 	// This function builds a daily schedule at a predetermined time, where students can view events in a simple layout
 	
-/*
-	if () { // If it's not time to build the schedule, don't build it.
-		return 'The daily schedule was not built.';
+	if (!$enableDailySummaryPage) {
+		return 'Daily schedule is not enabled.';
 	}
-*/
+	
+	$event_count = count($todays_events);
+	$right_now = strtotime("now");
+
+	$meta = array(
+		'lastUpdated' => "{$right_now}",
+		'dailyEventCount' => "{$event_count}",
+	);
 
 	$json_print = array(
-		'meta' => 'nah',
+		'meta' => $meta,
 		'events' => $todays_events
 	);
 
@@ -124,7 +176,7 @@ function searchEvents($eventsArray) {
 		if ($now <= $event_start_unix and $event_start_unix <= $later) {
 			// We've got a currently happening event!
 			$event_location = findEventLocation($event_raw_description); // Using grep to grab the location
-			tweetStuff($event_name, $event_url, $event_location, $event_organization, $event_start_time);
+			tweetEvent($event_name, $event_url, $event_location, $event_organization, $event_start_time);
 			$i_posted++;
 		}
 		$i_searched++;
@@ -135,7 +187,7 @@ function searchEvents($eventsArray) {
 
 
 
-function tweetStuff($event_name, $event_url, $event_location, $event_organization, $event_start_time) {
+function tweetEvent($event_name, $event_url, $event_location, $event_organization, $event_start_time) {
 	// Limits string lengths, and posts to twitter
 	
 	require_once 'includes/twitteroauth.php';
