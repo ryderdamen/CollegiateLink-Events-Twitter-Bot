@@ -3,8 +3,19 @@
 	// Author: Ryder Damen
 	// This page acts as a daily summary of events for the twitter bot to link to. It is fed by a .json file, supplied by the main cron.php file
 	
-	// File Setup
+	// File Setup and preventing cache
+	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
 	include('../includes/config.php');
+		
+	
+	// Only display the page, if it has been enabled
+	if (!$enableDailySummaryPage) {
+		echo "This page has been disabled by the network administrator. Sorry about that!";
+		die;
+	}
+	
 	date_default_timezone_set($timeZoneSet);
 	$events_json = json_decode(file_get_contents('events.json'));	
 	$today = date('M j, Y');	
