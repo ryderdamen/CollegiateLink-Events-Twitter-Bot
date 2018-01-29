@@ -96,7 +96,7 @@
 		</div>
 		<div class='footer'>
 		<div class='inner'>
-			<p>Designed by <a href='http://ryda.ca'>Ryder Damen</a> | For more info, visit <a href='<?php echo $schoolURL; ?>'><?php echo $collegiateLinkSiteName; ?></a></p>
+			<p><a href='https://ryderdamen.com' target="_blank">Created by Ryder Damen</a> | <a href='https://www.behance.net/gallery/55682179/Ryerson-Events-Bot' target="_blank">About This Project</a> | <a href='https://github.com/ryderdamen/Ryerson-Events-Twitter-Bot' target="_blank">Get the Code</a> | <a href='<?php echo $schoolURL; ?>'>For more events, visit  <?php echo $collegiateLinkSiteName; ?></a></p>
 		</div>
 	</div>
 </body>
