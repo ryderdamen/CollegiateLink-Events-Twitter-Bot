@@ -200,9 +200,9 @@ function tweetEvent($event_name, $event_url, $event_location, $event_organizatio
     $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_SECRET);
 	
 	// Limiting the string lengths for twitter with elvis operators (similar to if else statements)
-    $event_name = strlen($event_name) > 30 ? substr($event_name,0,27)."..." : $event_name;
-    $event_organization = strlen($event_organization) > 30 ? substr($event_organization,0,27)."..." : $event_organization;
-    $event_location = strlen($event_location) > 30 ? substr($event_location,0,27)."..." : $event_location;
+    $event_name = strlen($event_name) > 60 ? substr($event_name,0,57)."..." : $event_name;
+    $event_organization = strlen($event_organization) > 60 ? substr($event_organization,0,57)."..." : $event_organization;
+    $event_location = strlen($event_location) > 60 ? substr($event_location,0,57)."..." : $event_location;
     
     // Optimizing date for twitter
     $event_start_time = date('g:i A' ,strtotime($event_start_time));
