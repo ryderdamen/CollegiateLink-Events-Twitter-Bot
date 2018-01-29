@@ -36,7 +36,6 @@ h1 {
 	font-size: 24px;
 	text-align: center;
 	margin: 0;
-	padding-top: 50px;
 	padding-bottom: 25px;
 }
 
@@ -103,5 +102,10 @@ th {
 
 td {
 	padding: 10px;
+}
+
+logo {
+	height: 200px;
+	margin: auto;
 }
 

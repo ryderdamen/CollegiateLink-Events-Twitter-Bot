@@ -38,6 +38,7 @@
 </head>
 <body>
     <div class='header'>
+	    <img src="includes/logo.png" style="height: 200px; margin: auto; display: block;">
 		<h1 class='masthead-brand'>
 			<?php echo $schoolName; ?> Events for <?php echo $today; ?>
 		</h1>
