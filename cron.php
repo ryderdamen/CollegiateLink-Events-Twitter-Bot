@@ -112,6 +112,10 @@ function buildDailySchedule($todays_events, $today) {
 		'meta' => $meta,
 		'events' => $todays_events
 	);
+	
+	if ( !is_readable('./today/events.json') or !is_writeable('./today/events.json') ) {
+		return 'There is a file permissions error. Please check your server settings';
+	}
 
 	// Write the data to JSON
 	$json_file = fopen("./today/events.json", "w");
