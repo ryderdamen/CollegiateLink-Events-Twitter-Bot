@@ -35,6 +35,15 @@
 	<meta http-equiv='expires' content='0'>
 	<meta http-equiv='pragma' content='no-cache'>
 	<link href='includes/main.css' rel='stylesheet'>
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $googleTrackingID; ?>"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-97296944-6');
+	</script>
 </head>
 <body>
     <div class='header'>

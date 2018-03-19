@@ -16,6 +16,9 @@
 
 	// The PHP timezone ID for your school (ex: America/Toronto)
 	$timeZoneSet = "America/Toronto";
+	
+	// Enter your google tracking ID for tracking visitors to the "today" page
+	$googleTrackingID = "UA-97296944-6";
 
 
 //******************************************//
