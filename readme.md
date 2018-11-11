@@ -1,5 +1,5 @@
-# Ryerson Events Bot
-A PHP twitter bot that posts currently happening events at Ryerson University from the connectRU RSS feed.
+# CollegiateLink Events Bot
+A PHP twitter bot that posts currently happening events for institutions using the CollegiateLink framework.
 * [About This Project](http://ryda.ca/ryerson-events)
 * [Ryerson Live Twitter Feed](https://twitter.com/ryersonevents)
 * [Brock Live Twitter Feed](https://twitter.com/brockuevents)
