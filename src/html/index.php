@@ -1,3 +1,4 @@
-<?php 
-	// Silence is golden
-	?>
+<?php
+
+header("Location: /today/");
+exit();
